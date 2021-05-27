@@ -1,14 +1,59 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Serpent - Chapitre 16</title>
+	<title>Le jeu du Serpent</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+		integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+	<style type="text/css">
+		body {
+			background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+			background-size: 400% 400%;
+			animation: gradient 15s ease infinite;
+		}
+
+		@keyframes gradient {
+			0% {
+				background-position: 0% 50%;
+			}
+			50% {
+				background-position: 100% 50%;
+			}
+			100% {
+				background-position: 0% 50%;
+			}
+		}
+
+		.box {
+			background-color: #e5e5f7;
+			box-shadow: 2px 2px 73px -4px rgb(0 0 0 / 75%);
+		}
+	</style>
 </head>
+
 <body>
-	<p id = "score">Score : 0</p>
-	<canvas id="canvas" width="400" height="400"></canvas>
+	<div class="container">
+		<div class="row">
+			<div class="box col-5 mx-auto mt-5 pt-3 pb-5 px-5 d-flex flex-column">
+				<h1 class="text-center mt-4">Le jeu du Serpent</h1>
+				<p class="text-center py-3">Utilisez une touche directionnelle du clavier pour commencer : <i
+						class="fas fa-arrow-circle-up"></i><i class="fas fa-arrow-circle-down"></i><i
+						class="fas fa-arrow-circle-left"></i><i class="fas fa-arrow-circle-right"></i></p>
+				<canvas id="canvas" width="400" height="400"></canvas>
+				<p class="h4" id="score">Score : 0</p>
+			</div>
+		</div>
+	</div>
 
-	<script src="https://code.jquery.com/jquery-2.1.0.js" type="text/javascript"></script>
-
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+		crossorigin="anonymous"></script>
 	<script type="text/javascript">
 		var canvas = document.getElementById("canvas");
 		var ctx = canvas.getContext("2d");
@@ -46,7 +91,7 @@
 			return tableau[Math.floor(Math.random() * tableau.length)];
 		};
 
-		var dessinerBloc = function (x, y, tailleBloc, couleur){
+		var dessinerBloc = function (x, y, tailleBloc, couleur) {
 			ctx.fillStyle = couleur;
 			ctx.strokeStyle = "White";
 			ctx.fillRect(x, y, tailleBloc, tailleBloc);
@@ -59,8 +104,8 @@
 			ctx.strokeStyle = "White";
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
-			ctx.fillText("GAME OVER", largeur/2, hauteur/2);
-			ctx.strokeText("GAME OVER", largeur/2, hauteur/2);
+			ctx.fillText("GAME OVER", largeur / 2, hauteur / 2);
+			ctx.strokeText("GAME OVER", largeur / 2, hauteur / 2);
 		};
 
 		var gestionScore = function () {
@@ -76,15 +121,15 @@
 				tempsAnimation = 200;
 			} else if (score > 4) {
 				tempsAnimation = 300;
-			} 	
+			}
 		}
 
 		// Gestion Pommes
 
 		var Pomme = function () {
 			this.couleur = choisirMolAleatoire(couleurs);
-			var xPomme = Math.floor(Math.random()*largeur/tailleBloc);
-			var yPomme = Math.floor(Math.random()*hauteur/tailleBloc);
+			var xPomme = Math.floor(Math.random() * largeur / tailleBloc);
+			var yPomme = Math.floor(Math.random() * hauteur / tailleBloc);
 			this.coordonnees = [xPomme, yPomme];
 			console.log("Coordonnées Pomme : " + this.coordonnees);
 		};
@@ -93,71 +138,71 @@
 			//dessinerBloc(this.coordonnees[0]*tailleBloc, this.coordonnees[1]*tailleBloc, tailleBloc, this.couleur);
 			ctx.fillStyle = this.couleur;
 			ctx.beginPath();
-			ctx.arc(this.coordonnees[0]*tailleBloc + tailleBloc/2, this.coordonnees[1]*tailleBloc + tailleBloc/2, tailleBloc/2, 0, Math.PI*2, false);
+			ctx.arc(this.coordonnees[0] * tailleBloc + tailleBloc / 2, this.coordonnees[1] * tailleBloc + tailleBloc / 2, tailleBloc / 2, 0, Math.PI * 2, false);
 			ctx.fill();
 		};
-		
+
 		// Gestion Serpent
 
 		var Serpent = function () {
 			this.couleur = "Black";
-			this.tableau = [[0,0], [1,0], [2,0]];
+			this.tableau = [[0, 0], [1, 0], [2, 0]];
 			this.derniereDirection = "";
 			this.nouvelleDirection = "";
 			this.caseEffacee = [];
 		};
-		
+
 
 		Serpent.prototype.dessiner = function () {
 			for (var i = 0; i < this.tableau.length; i++) {
-				dessinerBloc(this.tableau[i][0]*tailleBloc, this.tableau[i][1]*tailleBloc, tailleBloc, this.couleur);
+				dessinerBloc(this.tableau[i][0] * tailleBloc, this.tableau[i][1] * tailleBloc, tailleBloc, this.couleur);
 			}
 		};
 
 
 		Serpent.prototype.deplacerDirection = function (direction) {
-	        	var derniereCase = this.tableau[this.tableau.length-1];
-				
-				if ( (direction === "haut") && (this.derniereDirection === "bas")) {
-					this.deplacerDirection("bas");
-				} else if ((direction === "bas") && (this.derniereDirection === "haut")) {
-					this.deplacerDirection("haut");
-				} else if ((direction === "gauche") && (this.derniereDirection === "droite")) {
-					this.deplacerDirection("droite");
-				} else if ((direction === "droite") && (this.derniereDirection === "gauche")) {
-					this.deplacerDirection("gauche");
-				} else if ( direction === "haut") {
-					this.derniereDirection = direction;
-					this.tableau.push([derniereCase[0], (derniereCase[1] - 1)]);
-					this.caseEffacee = this.tableau.shift();
-					//console.log(derniereCase);
-				} else if (direction === "bas") {
-					this.derniereDirection = direction;
-					this.tableau.push([derniereCase[0], (derniereCase[1] + 1)]);
-					this.caseEffacee = this.tableau.shift();
-					//console.log(derniereCase);
-				} else if (direction === "gauche") {
-					this.derniereDirection = direction;
-					this.tableau.push([(derniereCase[0] - 1), derniereCase[1]]);
-					this.caseEffacee = this.tableau.shift();
-					//console.log(derniereCase);
-				} else if (direction === "droite") {
-					this.derniereDirection = direction;
-					this.tableau.push([(derniereCase[0] + 1), derniereCase[1]]);
-					this.caseEffacee = this.tableau.shift();
-					//console.log(derniereCase);
-				} 
+			var derniereCase = this.tableau[this.tableau.length - 1];
+
+			if ((direction === "haut") && (this.derniereDirection === "bas")) {
+				this.deplacerDirection("bas");
+			} else if ((direction === "bas") && (this.derniereDirection === "haut")) {
+				this.deplacerDirection("haut");
+			} else if ((direction === "gauche") && (this.derniereDirection === "droite")) {
+				this.deplacerDirection("droite");
+			} else if ((direction === "droite") && (this.derniereDirection === "gauche")) {
+				this.deplacerDirection("gauche");
+			} else if (direction === "haut") {
+				this.derniereDirection = direction;
+				this.tableau.push([derniereCase[0], (derniereCase[1] - 1)]);
+				this.caseEffacee = this.tableau.shift();
+				//console.log(derniereCase);
+			} else if (direction === "bas") {
+				this.derniereDirection = direction;
+				this.tableau.push([derniereCase[0], (derniereCase[1] + 1)]);
+				this.caseEffacee = this.tableau.shift();
+				//console.log(derniereCase);
+			} else if (direction === "gauche") {
+				this.derniereDirection = direction;
+				this.tableau.push([(derniereCase[0] - 1), derniereCase[1]]);
+				this.caseEffacee = this.tableau.shift();
+				//console.log(derniereCase);
+			} else if (direction === "droite") {
+				this.derniereDirection = direction;
+				this.tableau.push([(derniereCase[0] + 1), derniereCase[1]]);
+				this.caseEffacee = this.tableau.shift();
+				//console.log(derniereCase);
+			}
 		};
 
 		Serpent.prototype.verifierCollisionPomme = function () {
-			var derniereCase = this.tableau[this.tableau.length-1];
+			var derniereCase = this.tableau[this.tableau.length - 1];
 			if ((derniereCase[0] == pomme1.coordonnees[0]) && (derniereCase[1] == pomme1.coordonnees[1])) {
 				this.tableau.unshift(pomme1.coordonnees);
-				dessinerBloc(this.caseEffacee[0]*tailleBloc, this.caseEffacee[1]*tailleBloc, tailleBloc, this.couleur);
+				dessinerBloc(this.caseEffacee[0] * tailleBloc, this.caseEffacee[1] * tailleBloc, tailleBloc, this.couleur);
 				console.log(this.tableau);
 				// déplacer la pomme
 				pomme1 = new Pomme;
-				while (this.verifierPommeDansSerpent() === true){
+				while (this.verifierPommeDansSerpent() === true) {
 					pomme1 = new Pomme;
 				}
 				gestionScore();
@@ -177,24 +222,24 @@
 		};
 
 		Serpent.prototype.verifierCollisionBord = function () {
-			var derniereCase = this.tableau[this.tableau.length-1];
+			var derniereCase = this.tableau[this.tableau.length - 1];
 			for (var i = 0; i < this.tableau.length; i++) {
 				coordonneesCase = this.tableau[i];
 				if (coordonneesCase[0] < 0) {
-					coordonneesCase[0] = largeur/tailleBloc -1;
-				} else if (coordonneesCase[0] > largeur/tailleBloc -1) {
+					coordonneesCase[0] = largeur / tailleBloc - 1;
+				} else if (coordonneesCase[0] > largeur / tailleBloc - 1) {
 					coordonneesCase[0] = 0;
 				} else if (coordonneesCase[1] < 0) {
-					coordonneesCase[1] = hauteur/tailleBloc -1;
-				} else if (coordonneesCase[1] > hauteur/tailleBloc -1) {
+					coordonneesCase[1] = hauteur / tailleBloc - 1;
+				} else if (coordonneesCase[1] > hauteur / tailleBloc - 1) {
 					coordonneesCase[1] = 0;
 				}
 			}
 		};
-		
+
 		Serpent.prototype.selfCollisionSerpent = function () {
-			var derniereCase = this.tableau[this.tableau.length-1];
-			for (var i = 0; i < this.tableau.length -1; i++) {
+			var derniereCase = this.tableau[this.tableau.length - 1];
+			for (var i = 0; i < this.tableau.length - 1; i++) {
 				coordonneesCase = this.tableau[i];
 				if ((derniereCase[0] == coordonneesCase[0]) && (derniereCase[1] == coordonneesCase[1])) {
 					return true;
@@ -206,34 +251,34 @@
 		// initialisation du serpent et de la pomme
 		var serpent1 = new Serpent;
 		var pomme1 = new Pomme;
-		while (serpent1.verifierPommeDansSerpent() === true){
+		while (serpent1.verifierPommeDansSerpent() === true) {
 			pomme1 = new Pomme;
 		}
 		serpent1.dessiner();
 		pomme1.dessiner();
 
 		// Boucle de jeu
-		$("body").keydown(function (evenement){
+		$("body").keydown(function (evenement) {
 			console.log(nomsCodes[evenement.keyCode]);
 			serpent1.nouvelleDirection = nomsCodes[evenement.keyCode];
 		});
 
 		var boucleJeu = function () {
-			
+
 			ctx.clearRect(0, 0, largeur, hauteur);
 
 			serpent1.deplacerDirection(serpent1.nouvelleDirection);
 			pomme1.dessiner();
 			serpent1.verifierCollisionBord();
-			if (serpent1.selfCollisionSerpent()){
+			if (serpent1.selfCollisionSerpent()) {
 				var finJeu = true;
 			}
 			serpent1.dessiner();
 			serpent1.verifierCollisionPomme();
-			
+
 			ctx.strokeStyle = "Black";
 			ctx.strokeRect(0, 0, largeur, hauteur);
-			if (finJeu == true){
+			if (finJeu == true) {
 				gameOver();
 				clearTimeout(jeu);
 			} else {
@@ -243,9 +288,10 @@
 
 
 		var jeu = boucleJeu();
-		
+
 
 	</script>
 
 </body>
+
 </html>
