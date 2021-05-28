@@ -549,13 +549,19 @@ section.resume-section .resume-item .resume-date {
     }
 }
 
-@media (max-width: 575px) {
+@media screen and (max-width: 575px) {
+    #about {
+        background: rgba(255, 255, 255, 1);
+    }
     #contact .social-icon-f {
         text-align: center;
     }
 }
 
-@media (max-width: 420px) {
+@media screen and (max-width: 420px) {
+    #about {
+        background: rgba(255, 255, 255, 1);
+    }
     #contact .social-icon-f {
         text-align: center;
     }
